@@ -1,0 +1,176 @@
+[
+  {
+    "IncidentID": "INC-1",
+    "DateTime": "2024-11-29 14:35:22 UTC",
+    "IncidentType": "Phishing Attack",
+    "SourceInformation": {
+      "IPAddress": "192.168.45.12",
+      "EmailAddress": "support@fakebankingalerts.com",
+      "DomainDetails": {
+        "MaliciousDomain": "http://malicious-domain.com/login",
+        "RegisteredOn": "2024-11-01",
+        "HostingProvider": "HostEasy",
+        "CertificateDetails": "Self-signed SSL certificate with CN: 'secure-banking-login'"
+      }
+    },
+    "TargetInformation": {
+      "EmployeeName": "Jane Doe",
+      "Department": "Finance",
+      "EmailAddress": "jane.doe@company.com",
+      "DeviceInformation": {
+        "Hostname": "FIN-LAPTOP-123",
+        "OperatingSystem": "Windows 11 Enterprise",
+        "AntivirusStatus": "Up-to-date"
+      }
+    },
+    "CaseDescription": "At 14:35 UTC, the Secure Email Gateway (SEG) flagged an incoming email addressed to Jane Doe, a finance department employee, as suspicious. The email masqueraded as a legitimate internal communication from IT support, urging immediate action to prevent payroll interruptions. The email contained a subject line: 'URGENT: Payroll Update Required', a malicious hyperlink: 'http://malicious-domain.com/login', and a sender's display name: 'IT Support Team'. Jane Doe clicked the provided link, which redirected her to a phishing page imitating the company's single sign-on portal. The fake page collected her login credentials. After entering her credentials, Jane noticed irregularities and reported the incident to the IT Helpdesk. Simultaneously, the anomaly detection system flagged an unusual login attempt from an external IP address (203.0.113.45) to Jane Doe\u2019s account, originating from a geographic location in a foreign country not associated with her typical login activity.",
+    "DetectionAndObservables": {
+      "EmailAnalysis": {
+        "HeaderAnomalies": {
+          "SenderDomain": "fakebankingalerts.com",
+          "SPF_DKIM_DMARC": "Failed authentication checks"
+        },
+        "Attachment": "None",
+        "Content": "Text only with embedded HTML hyperlink"
+      },
+      "NetworkAnalysis": {
+        "MaliciousDomainDetails": {
+          "DNSLookup": "Resolved to 185.54.23.67 (known bad actor IP)",
+          "DomainReputation": "Categorized as 'Phishing' by multiple threat intelligence sources"
+        },
+        "TrafficLogs": "Outbound connection recorded from Jane Doe's laptop to 185.54.23.67"
+      },
+      "HostAnalysis": {
+        "Device": "FIN-LAPTOP-123",
+        "EventLogs": [
+          "Outbound HTTP request to malicious domain at 14:37 UTC",
+          "No file downloads or malware detected"
+        ]
+      }
+    },
+    "ImpactAssessment": {
+      "ImmediateRisks": [
+        "Exposure of Jane Doe's credentials",
+        "Potential unauthorized access to internal financial systems"
+      ],
+      "BroaderRisks": [
+        "Risk of lateral movement within the network if attacker successfully logs in",
+        "Potential financial fraud targeting the company"
+      ]
+    },
+    "ResolutionTime": "6 hours",
+    "SeverityLevel": "High",
+    "Notes": [
+      {
+        "NoteId": 1,
+        "Note": "Similar phishing campaigns have targeted finance employees across other organizations within the past two months. Observed increase in phishing sophistication, including realistic imitations of internal portals.",
+        "CreatedBy": "Sarah L., SOC Analyst",
+        "Time": "2024-11-29 16:10 UTC"
+      },
+      {
+        "NoteId": 2,
+        "Note": "Likely part of a broader campaign orchestrated by an organized group. Indicators of compromise (IOCs) shared with local CERT and law enforcement agencies.",
+        "CreatedBy": "John P., Threat Intelligence Analyst",
+        "Time": "2024-11-29 17:30 UTC"
+      },
+      {
+        "NoteId": 3,
+        "Note": "hahaha I deleted gili note and added mine!",
+        "CreatedBy": "etay",
+        "Time": "2025-06-21 19:18 UTC"
+      }
+    ],
+    "CaseStatus": "Open"
+  },
+  {
+    "IncidentID": "INC-2",
+    "DateTime": "2024-11-29 18:45:00 UTC",
+    "IncidentType": "EDR",
+    "SourceInformation": {
+      "Endpoint": "HR-LAPTOP-001",
+      "DetectedBy": "CrowdStrike Falcon",
+      "ThreatDetails": {
+        "ThreatName": "Ransomware - LockBit Variant",
+        "Severity": "High",
+        "SignatureVersion": "2024.11.29"
+      }
+    },
+    "TargetInformation": {
+      "EmployeeName": "Michael Brown",
+      "Department": "HR",
+      "EmailAddress": "michael.brown@company.com",
+      "DeviceInformation": {
+        "Hostname": "HR-LAPTOP-001",
+        "OperatingSystem": "Windows 10 Pro",
+        "AntivirusStatus": "Up-to-date"
+      }
+    },
+    "CaseDescription": "An EDR alert was triggered by CrowdStrike Falcon for HR-LAPTOP-001, assigned to Michael Brown. The EDR system detected suspicious activity involving the execution of a known ransomware variant (LockBit). Initial network logs indicated abnormal file encryption attempts and outbound communication to a known command-and-control (C2) server. The ransomware attempted to encrypt sensitive HR files and upload encryption keys to the C2 server. Further investigation revealed the endpoint had executed a malicious file downloaded from an email attachment titled 'Payroll_Update.docm'.",
+    "DetectionAndObservables": {
+      "EDRAnalysis": {
+        "MalwareSignature": "Ransomware - LockBit Variant",
+        "BehavioralAnalysis": "Detected unauthorized file encryption and external C2 communications."
+      },
+      "NetworkLogAnalysis": {
+        "C2ServerDetails": {
+          "IPAddress": "172.16.35.40",
+          "Domain": "lockbit-c2.network",
+          "Reputation": "High Risk - Known Ransomware"
+        },
+        "TrafficLogs": [
+          "Outbound connection attempts to 172.16.35.40",
+          "Data exfiltration attempts detected at 2024-11-29 18:30 UTC"
+        ]
+      },
+      "HostAnalysis": {
+        "Device": "HR-LAPTOP-001",
+        "EventLogs": [
+          "Execution of 'Payroll_Update.docm' at 2024-11-29 18:10 UTC",
+          "Unauthorized encryption of 52 HR files detected"
+        ]
+      }
+    },
+    "ImpactAssessment": {
+      "ImmediateRisks": [
+        "Loss of sensitive HR data due to file encryption",
+        "Potential data exfiltration of HR-related information"
+      ],
+      "BroaderRisks": [
+        "Propagation of ransomware to other endpoints",
+        "Exposure of encryption keys to external C2 server"
+      ]
+    },
+    "ResolutionTime": "8 hours",
+    "SeverityLevel": "Critical",
+    "CaseStatus": "Open",
+    "AdditionalNotes": [
+      {
+        "NoteId": 1,
+        "Note": "Ransomware execution linked to email attachment titled 'Payroll_Update.docm'.",
+        "CreatedBy": "Alice K., SOC Analyst",
+        "Time": "2024-11-29 19:00 UTC"
+      },
+      {
+        "NoteId": 2,
+        "Note": "Indicators of compromise (IOCs) related to LockBit shared with external threat intelligence databases.",
+        "CreatedBy": "Mark T., Threat Intelligence Analyst",
+        "Time": "2024-11-29 20:00 UTC"
+      },
+      {
+        "NoteId": 3,
+        "Note": "Endpoint isolation and data recovery were successful. No lateral movement detected.",
+        "CreatedBy": "Sophia W., Incident Response Lead",
+        "Time": "2024-11-29 22:15 UTC"
+      }
+    ],
+    "Notes": []
+  },
+  {
+    "IncidentID": "INC12345",
+    "CaseDescription": "Mock case for testing purposes.",
+    "IncidentType": "Phishing Attack",
+    "SeverityLevel": "Medium",
+    "CaseStatus": "Open",
+    "Notes": []
+  }
+]
